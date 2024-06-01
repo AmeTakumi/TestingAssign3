@@ -1,0 +1,5 @@
+apply plugin: 'application'
+application {
+    mainClassName = 'Deadlock'
+    description = "Deadlock Example"
+}

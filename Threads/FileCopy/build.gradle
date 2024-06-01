@@ -1,0 +1,5 @@
+apply plugin: 'application'
+application {
+    mainClassName = 'TempConvertClient'
+    description = "File copy using threads example"
+}

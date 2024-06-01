@@ -1,0 +1,6 @@
+apply plugin: 'application'
+
+application {
+    mainClassName = 'GroupFileSerialize'
+    description = "Serialization example"
+}
