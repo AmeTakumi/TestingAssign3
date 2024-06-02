@@ -222,6 +222,7 @@ class WebServer {
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
           builder.append("Invalid input. Please ensure both num1 and num2 are integers.");
+        }
 
         } else if (request.contains("guessColorAndNumber?")) {
           Map<String, String> query_pairs = splitQuery(request.replace("guessColorAndNumber?", ""));
