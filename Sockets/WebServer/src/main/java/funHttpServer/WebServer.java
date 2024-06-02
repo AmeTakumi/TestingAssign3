@@ -232,8 +232,8 @@ class WebServer {
           String guessedNumberString = query_pairs.get("number");
 
           // Correct answers will be here:
-          final String correctColor = "green";
-          final int correctNumber = 2;
+          final String correctColor = "blue";
+          final int correctNumber = 1;
 
           if (guessedColor == null || guessedNumberString == null) {
             builder.append("HTTP/1.1 400 Bad Request\n");
