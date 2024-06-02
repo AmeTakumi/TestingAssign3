@@ -217,6 +217,12 @@ class WebServer {
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
 
+        } catch (NumberFormatException e) {
+          builder.append("HTTP/1.1 400 Bad Request\n");
+          builder.append("Content-Type: text/html; charset=utf-8\n");
+          builder.append("\n");
+          builder.append("Invalid input. Please ensure both num1 and num2 are integers.");
+
         } else if (request.contains("guessColorAndNumber?")) {
           Map<String, String> query_pairs = splitQuery(request.replace("guessColorAndNumber?", ""));
 
@@ -280,44 +286,48 @@ class WebServer {
             }
           }
 
-        } else if (request.contains("convertDistance?")) {
-          Map<String, String> query_pairs = splitQuery(request.replace("convertDistance?", ""));
+        } else if (request.contains("convertFeetToInches?")) {
+          Map<String, String> query_pairs = splitQuery(request.replace("convertFeetToInches?", ""));
 
-          String kilometersHoldString = query_pairs.get("kilometers:");
+          String feetHolderString = query_pairs.get("feet");
 
-          if (kilometersHoldString == null) {
+          if (feetHoldString == null) {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
-            builder.append("The 'kilometers' amount must be provided.");
+            builder.append("The 'feet' amount must be provided.");
 
           }
           else
           {
 
             try {
-              double amountKilometers = Double.parseDouble(kilometersHoldString);
-              if (amountKilometers < 0) {
-                throw new IllegalArgumentException();
-
+              double amountFeet = Double.parseDouble(feetHoldString);
+              if (amountFeet < 0) {
+                throw new IllegalArgumentException("Please submit a positive integer (no decimal) for feet, thanks!");
               }
 
-              double amountMiles = amountKilometers * 0.621371;
+              double amountInches = amountFeet * 12;
 
               builder.append("HTTP/1.1 200 OK\n");
               builder.append("Content-Type: text/plain; charset=utf-8\n");
               builder.append("\n");
-              builder.append(String.format("%.2f kilometers is roughly %.2f miles",
-                      amountKilometers, amountMiles));
+              builder.append(String.format("%.2f feet is equal to %.2f inches.", amountFeet, amountInches));
 
             } catch (NumberFormatException e) {
               builder.append("HTTP/1.1 400 Bad Request\n");
               builder.append("Content-Type: text/html; charset=utf-8\n");
               builder.append("\n");
-              builder.append("Please submit a positive integer for Kilometers, thanks!");
+              builder.append("Please submit a positive integer (no decimal) for feet, thanks!.");
 
+            } catch (IllegalArgumentException e) {
+              builder.append("HTTP/1.1 400 Bad Request\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n");
+              builder.append("\n");
+              builder.append(e.getMessage());
             }
           }
+        }
 
 
         } else if (request.contains("github?")) {
