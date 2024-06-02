@@ -232,8 +232,8 @@ class WebServer {
           String guessedNumberString = query_pairs.get("number");
 
           // Correct answers will be here:
-          final String correctColor = "blue";
-          final int correctNumber = 1;
+          final String correctColor = "green";
+          final int correctNumber = 2;
 
           if (guessedColor == null || guessedNumberString == null) {
             builder.append("HTTP/1.1 400 Bad Request\n");
@@ -300,34 +300,34 @@ class WebServer {
             builder.append("The 'feet' amount must be provided.");
 
           } else {
+            {
+              try {
+                double amountFeet = Double.parseDouble(feetHolderString);
+                if (amountFeet < 0) {
+                  throw new IllegalArgumentException("Please submit a positive integer (no decimal) for feet, thanks!");
+                }
 
-            try {
-              double amountFeet = Double.parseDouble(feetHolderString);
-              if (amountFeet < 0) {
-                throw new IllegalArgumentException("Please submit a positive integer (no decimal) for feet, thanks!");
+                double amountInches = amountFeet * 12;
+
+                builder.append("HTTP/1.1 200 OK\n");
+                builder.append("Content-Type: text/plain; charset=utf-8\n");
+                builder.append("\n");
+                builder.append(String.format("%.2f feet is equal to %.2f inches.", amountFeet, amountInches));
+
+              } catch (NumberFormatException e) {
+                builder.append("HTTP/1.1 400 Bad Request\n");
+                builder.append("Content-Type: text/html; charset=utf-8\n");
+                builder.append("\n");
+                builder.append("Please submit a positive integer (no decimal) for feet, thanks!.");
+
+              } catch (IllegalArgumentException e) {
+                builder.append("HTTP/1.1 400 Bad Request\n");
+                builder.append("Content-Type: text/html; charset=utf-8\n");
+                builder.append("\n");
+                builder.append(e.getMessage());
               }
-
-              double amountInches = amountFeet * 12;
-
-              builder.append("HTTP/1.1 200 OK\n");
-              builder.append("Content-Type: text/plain; charset=utf-8\n");
-              builder.append("\n");
-              builder.append(String.format("%.2f feet is equal to %.2f inches.", amountFeet, amountInches));
-
-            } catch (NumberFormatException e) {
-              builder.append("HTTP/1.1 400 Bad Request\n");
-              builder.append("Content-Type: text/html; charset=utf-8\n");
-              builder.append("\n");
-              builder.append("Please submit a positive integer (no decimal) for feet, thanks!.");
-
-            } catch (IllegalArgumentException e) {
-              builder.append("HTTP/1.1 400 Bad Request\n");
-              builder.append("Content-Type: text/html; charset=utf-8\n");
-              builder.append("\n");
-              builder.append(e.getMessage());
             }
           }
-
 
 
         } else if (request.contains("github?")) {
